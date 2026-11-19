@@ -1,7 +1,7 @@
 package com.sky.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sky.interceptor.JwtTokenAdminInterceptor;
+import com.sky.json.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -30,11 +30,13 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Autowired
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
 
+
     /**
      * 注册自定义拦截器
      *
      * @param registry
      */
+    @Override
     protected void addInterceptors(InterceptorRegistry registry) {
         log.info("开始注册自定义拦截器...");
         registry.addInterceptor(jwtTokenAdminInterceptor)
@@ -68,6 +70,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      * 设置静态资源映射
      * @param registry
      */
+    @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
@@ -77,13 +80,16 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      * 扩展MVC框架消息转换器
      * @param converters
      */
+    @Override
     protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         log.info("扩展消息转换器");
         //自己创建一个消息转换器
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         //需要为消息转换器设置一个对象转换器，将java对象序列化为json数据
-        converter.setObjectMapper(new ObjectMapper());
+        //必须使用自定义的JacksonObjectMapper，它注册了JavaTimeModule；
+        //直接new ObjectMapper()没有Java8时间支持，序列化LocalDateTime时会抛InvalidDefinitionException
+        converter.setObjectMapper(new JacksonObjectMapper());
         //将我们自己的消息转换器加到容器中
-        converters.add(0,converter);
+        converters.add(0, converter);
     }
 }
