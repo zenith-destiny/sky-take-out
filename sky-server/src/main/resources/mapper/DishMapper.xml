@@ -7,6 +7,11 @@
         values
             (#{name},#{categoryId},#{price},#{image},#{description},#{createTime},#{updateTime},#{updateTime},#{createUser},#{status},)
     </insert>
+    <delete id="deleteByIds">
+        <foreach collection="ids" separator="," item="id"  open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
 
     <select id="pageQuery" resultType="com.sky.vo.DishVO">
         select d.*,c.name as categiryName from dish d left outer join category c on d.category_id = c.id
