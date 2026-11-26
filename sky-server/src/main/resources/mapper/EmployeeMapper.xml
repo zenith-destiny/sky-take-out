@@ -4,7 +4,7 @@
 <mapper namespace="com.sky.mapper.EmployeeMapper">
 
     <select id="pageQuery" resultType="com.sky.entity.Employee">
-        select * from empioyee
+        select * from employee
         <where>
             <if test="name!=null and name != ' '">
                 and name like concat("%","name","%")
@@ -13,7 +13,7 @@
         order by create_time desc
     </select>
     <update id="update" parameterType="employee">
-        update empioyee
+        update emloyee
         <set>
             <if test="name!=null">name = #{name}</if>
             <if test="username!=null">name = #{username}</if>

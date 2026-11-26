@@ -18,7 +18,7 @@
             <if test="description != null">description = #{description},</if>
             <if test="status != null">status = #{status},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="updateUser != null">update_uaser = #{updateUser},</if>
         </set>
         where id = #{id}
     </update>
@@ -44,6 +44,55 @@
             </if>
         </where>
         order by s.create_time desc
+    </select>
+
+
+
+    <select id="list" parameterType="Setmeal" resultType="Setmeal">
+        select * from setmeal
+        <where>
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="setmealAndDishMap" type="com.sky.vo.SetmealVO">
+        <id     column="id"          property="id"/>
+        <result column="name"        property="name"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="price"       property="price"/>
+        <result column="status"      property="status"/>
+        <result column="description" property="description"/>
+        <result column="image"       property="image"/>
+        <result column="update_time" property="updateTime"/>
+        <collection property="setmealDishes" ofType="com.sky.entity.SetmealDish">
+            <id     column="sd_id"      property="id"/>
+            <result column="setmeal_id" property="setmealId"/>
+            <result column="dish_id"    property="dishId"/>
+            <result column="sd_name"    property="name"/>
+            <result column="sd_price"   property="price"/>
+            <result column="copies"     property="copies"/>
+        </collection>
+    </resultMap>
+
+    <select id="getByIdWithDish" parameterType="long" resultMap="setmealAndDishMap">
+        select a.*,
+               b.id         sd_id,
+               b.setmeal_id,
+               b.dish_id,
+               b.name       sd_name,
+               b.price      sd_price,
+               b.copies
+        from setmeal a
+                 left join setmeal_dish b on a.id = b.setmeal_id
+        where a.id = #{id}
     </select>
 
 </mapper>
