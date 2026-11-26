@@ -33,7 +33,7 @@ public class UserController {
 
     /**
      * 微信登录
-     * @param userLoginVO
+     * @param userLoginDTO
      * @return
      */
     @PostMapping("/login")

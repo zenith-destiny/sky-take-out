@@ -8,20 +8,47 @@
             (#{name},#{categoryId},#{price},#{image},#{description},#{createTime},#{updateTime},#{updateTime},#{createUser},#{status},)
     </insert>
 
-    <update id="update">
+
+
+    <update id="update" parameterType="dish">
+        update dish
         <set>
-            <if test="name != null">name = #{name},</if>
-            <if test="categoryId != null">category_id = #{categoryId},</if>
-            <if test="price != null">price = #{price},</if>
-            <if test="image != null">image = #{image},</if>
-            <if test="description != null">description = #{description},</if>
-            <if test="status != null">status = #{status},</if>
-            <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="image != null">
+                image = #{image},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser}
+            </if>
         </set>
         where id = #{id}
     </update>
-
     <delete id="deleteByIds">
         <foreach collection="ids" separator="," item="id"  open="(" close=")">
             #{id}

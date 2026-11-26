@@ -14,7 +14,7 @@ public interface SetmealDishMapper {
      * @param dishIds
      * @return
      */
-    List<Long> getSetmealDishIdBySetmealId(List<Long> dishIds);
+    List<Long> getSetmealIdsByDishIds(List<Long> dishIds);
 
     /**
      * 批量保存套餐和菜品的关联关系
@@ -36,4 +36,5 @@ public interface SetmealDishMapper {
      */
     @Delete("delete from setmeal_dish where setmeal_id = #{setmealId}")
     void deleteBySetmealId(Long setmealId);
+
 }
